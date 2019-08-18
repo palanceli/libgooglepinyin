@@ -46,5 +46,6 @@ set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-undefined,error ${CMAKE_SHARED_LINKER_FLAG}"
 
 add_subdirectory(src)
 add_subdirectory(tools)
+add_subdirectory(test)
 add_subdirectory(include)
 add_subdirectory(data)

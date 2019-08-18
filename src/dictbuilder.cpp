@@ -365,6 +365,15 @@ void DictBuilder::free_resource() {
   homo_idx_num_gt1_ = 0;
 }
 
+// read_raw_dict 读取文件data/rawdict_utf16_65105_freq.txt，这是文本格式的系统词库
+// 格式为：词条 词频 GBK_Flag 拼音
+//
+// 鼥 0.750684002197 1 ba
+// 釛 0.781224156844 1 ba
+// ...
+// 欧洲市场 170.551683166 0 ou zhou shi chang
+//
+
 size_t DictBuilder::read_raw_dict(const char* fn_raw,
                                   const char *fn_validhzs,
                                   size_t max_item) {
@@ -391,7 +400,7 @@ size_t DictBuilder::read_raw_dict(const char* fn_raw,
 
   // Begin reading the lemma entries
   for (size_t i = 0; i < max_item; i++) {
-    // read next entry
+    // read next entry 每次读入一行
     if (!utf16_reader.readline(read_buf, kReadBufLen)) {
       lemma_num = i;
       break;
@@ -401,7 +410,7 @@ size_t DictBuilder::read_raw_dict(const char* fn_raw,
     char16 *token;
     char16 *to_tokenize = read_buf;
 
-    // Get the Hanzi string
+    // Get the Hanzi string 读取词条
     token = utf16_strtok(to_tokenize, &token_size, &to_tokenize);
     if (NULL == token) {
       free_resource();
@@ -426,7 +435,7 @@ size_t DictBuilder::read_raw_dict(const char* fn_raw,
 
     lemma_arr_[i].hz_str_len = token_size;
 
-    // Get the freq string
+    // Get the freq string 读取词频
     token = utf16_strtok(to_tokenize, &token_size, &to_tokenize);
     if (NULL == token) {
       free_resource();
@@ -459,7 +468,7 @@ size_t DictBuilder::read_raw_dict(const char* fn_raw,
       }
     }
 
-    // Get spelling String
+    // Get spelling String 读取拼音
     bool spelling_not_support = false;
     for (size_t hz_pos = 0; hz_pos < (size_t)lemma_arr_[i].hz_str_len;
          hz_pos++) {

@@ -33,3 +33,4 @@
 build/
 modules/
 data/dict_pinyin.dat
+.DS_Store
