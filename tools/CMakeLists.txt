@@ -12,3 +12,6 @@ target_link_libraries(dictbuilder ${LINKER_LIBS})
 
 # target_link_libraries(dictbuilder googlepinyin)
 
+# 添加拼音转换工具
+add_executable(pinyin_conv pinyin_convertor.cpp)
+target_link_libraries(pinyin_conv ${LINKER_LIBS})
