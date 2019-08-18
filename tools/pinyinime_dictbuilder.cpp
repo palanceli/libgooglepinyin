@@ -20,6 +20,8 @@
 #include <time.h>
 #include <unistd.h>
 #include "../include/dicttrie.h"
+#include "glog/logging.h"
+#include "glog/raw_logging.h"
 
 using namespace ime_pinyin;
 
@@ -28,9 +30,11 @@ using namespace ime_pinyin;
  * in dictdef.h.
  */
 int main(int argc, char* argv[]) {
+  FLAGS_logtostderr = 1; // 输出到控制台
+  
   char buffer[1024] = {0};
   char *cwd = getwd(buffer);
-  printf("current dir is: %s\n", cwd);
+  LOG(INFO)<<"current dir is:"<<cwd;
   
   // 将输入的默认路径改为：libgooglepinyin/data/rawdict_utf16_65105_freq.txt
   // 和 libgooglepinyin/data/valid_utf16.txt

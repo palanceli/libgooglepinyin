@@ -30,6 +30,8 @@ set_target_properties(googlepinyin PROPERTIES
     LINK_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}
 )
 
+# 设置为静态链接
+set(ENABLE_STATIC 1)
 if (ENABLE_STATIC)
 
 add_library(googlepinyin-static STATIC ${GOOGLEPINYIN_SRC})
