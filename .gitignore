@@ -32,3 +32,4 @@
 *.app
 build/
 modules/
+data/dict_pinyin.dat
