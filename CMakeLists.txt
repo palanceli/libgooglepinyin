@@ -3,6 +3,16 @@ cmake_minimum_required(VERSION 2.6)
 
 option(ENABLE_STATIC "Build static library" True)
 
+# 添加模块gflag、glog、GTest
+find_package(gflags REQUIRED)
+include_directories (${gflags_INCLUDE_DIR})
+
+find_package(glog REQUIRED)
+include_directories(${GLOG_INCLUDE_DIRS}) 
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+
 # uninstall target
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"

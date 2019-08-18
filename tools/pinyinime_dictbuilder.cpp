@@ -20,6 +20,8 @@
 #include <time.h>
 #include <unistd.h>
 #include "../include/dicttrie.h"
+#include "glog/logging.h"
+#include "glog/raw_logging.h"
 
 using namespace ime_pinyin;
 
@@ -28,13 +30,21 @@ using namespace ime_pinyin;
  * in dictdef.h.
  */
 int main(int argc, char* argv[]) {
+  FLAGS_logtostderr = 1; // 输出到控制台
+  
+  char buffer[1024] = {0};
+  char *cwd = getwd(buffer);
+  LOG(INFO)<<"current dir is:"<<cwd;
+  
+  // 将输入的默认路径改为：libgooglepinyin/data/rawdict_utf16_65105_freq.txt
+  // 和 libgooglepinyin/data/valid_utf16.txt
   DictTrie* dict_trie = new DictTrie();
   bool success;
   if (argc >= 3)
      success = dict_trie->build_dict(argv[1], argv[2]);
   else
-     success = dict_trie->build_dict("../data/rawdict_utf16_65105_freq.txt",
-                                     "../data/valid_utf16.txt");
+     success = dict_trie->build_dict("../../../data/rawdict_utf16_65105_freq.txt",
+                                     "../../../data/valid_utf16.txt");
 
   if (success) {
     printf("Build dictionary successfully.\n");
@@ -43,10 +53,11 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
+  // 将输出路径改为：libgooglepinyin/build/data/dict_pinyin.dat
   if (argc >= 4)
 	success = dict_trie->save_dict(argv[3]);
   else
-	success = dict_trie->save_dict("dict_pinyin.dat");
+	success = dict_trie->save_dict("../../data/dict_pinyin.dat");
 
   if (success) {
     printf("Save dictionary successfully.\n");
