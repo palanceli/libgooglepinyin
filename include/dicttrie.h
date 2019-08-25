@@ -227,6 +227,8 @@ class DictTrie : AtomDictBase {
   // his_len is the history length to fill in the prediction buffer.
   size_t predict_top_lmas(size_t his_len, NPredictItem *npre_items,
                           size_t npre_max, size_t b4_used);
+  
+  void test_build_dict1(const char* fn_raw, const char* fn_validhzs);
 };
 }
 

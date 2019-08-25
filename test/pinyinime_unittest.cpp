@@ -47,6 +47,7 @@ namespace googlepinyin_test{
     
   protected:
     static void SetUpTestCase(){
+      FLAGS_logtostderr = 1; // 输出到控制台
       setlocale(LC_ALL, "");
     }
     static void TearDownTestCase(){
@@ -101,5 +102,13 @@ namespace googlepinyin_test{
   TEST_F(PinyinImeTest, TCImSearch01){
     // 只查系统词
     doSearch("dae");
+  }
+  
+  TEST_F(PinyinImeTest, TCBuildDict01){
+    
+    LOG(INFO)<<"========";
+    DictTrie* dict_trie = new DictTrie();
+    dict_trie->test_build_dict1("../../../data/rawdict_utf16_65105_freq.txt",
+                                      "../../../data/valid_utf16.txt");
   }
 }

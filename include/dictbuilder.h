@@ -99,6 +99,9 @@ class DictBuilder {
   // included.
   bool build_dict(const char* fn_raw, const char* fn_validhzs,
                   DictTrie *dict_trie);
+  
+  void test_build_dict1(const char* fn_raw, const char* fn_validhzs,
+                        DictTrie *dict_trie);
 
  private:
   // Fill in the buffer with id. The caller guarantees that the paramters are
