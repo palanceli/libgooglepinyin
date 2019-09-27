@@ -1,5 +1,6 @@
 set(PINYIN_TEST_SRCS
 	pinyinime_unittest.cpp
+	dictbuilder_unittest.cpp
 )
 
 add_executable(pinyin_test ${PINYIN_TEST_SRCS})
