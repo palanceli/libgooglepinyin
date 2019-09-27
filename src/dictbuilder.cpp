@@ -484,6 +484,7 @@ size_t DictBuilder::read_raw_dict(const char* fn_raw,
 
       utf16_strcpy_tochar(lemma_arr_[i].pinyin_str[hz_pos], token);
 
+      // 双声写作Zh、Ch、Sh，其它拼音均改为大写
       format_spelling_str(lemma_arr_[i].pinyin_str[hz_pos]);
 
       // Put the pinyin to the spelling table
