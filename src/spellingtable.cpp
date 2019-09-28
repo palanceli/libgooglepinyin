@@ -134,6 +134,7 @@ bool SpellingTable::init_table(size_t pure_spl_size, size_t spl_max_num,
   return true;
 }
 
+// 将spelling_str加入raw_spelling，freq是该拼音串的词频
 // raw_spellings_是一个哈希数组：
 // RawSpelling::str记录音节，RawSpelling::freq记录该音节的总词频
 bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
@@ -231,6 +232,7 @@ const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
             spelling_size_);
   }
 
+  // 对词频做归一化处理——压缩到[0,255]之间
   if (need_score_) {
     if (kPrintDebug0)
       printf("------------Spelling Possiblities--------------\n");
@@ -238,6 +240,7 @@ const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
     double max_score = 0;
     double min_score = 0;
 
+    // 计算最大、最小词频
     // After sorting, only the first spelling_num_ items are valid.
     for (size_t pos = 0; pos < spelling_num_; pos++) {
       raw_spellings_[pos].freq /= total_freq_;

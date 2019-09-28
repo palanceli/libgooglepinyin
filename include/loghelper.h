@@ -30,3 +30,4 @@ using namespace ime_pinyin;
 
 void printLemmaArray(LemmaEntry* lemma_arr, size_t num, int limit=10);
 void printSpellingTable(SpellingTable* spellingTable, int limit=10);
+void printSpellingBuff(const char *spellingBuf, size_t splItemSize, size_t num, int limit=10);

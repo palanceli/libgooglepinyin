@@ -84,11 +84,16 @@ TEST_F(DictBuilderTest, TC03BuildDict){
   dict_trie->free_resource(true);
   
   size_t lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
-  LOG(INFO)<<"lemma_num_="<<lemma_num_;
+  
+  size_t spl_item_size;
+  size_t spl_num;
+  const char* spl_buf;
+  spl_buf = dict_builder->spl_table_->arrange(&spl_item_size, &spl_num);
   
   // 查看dict_builder->lemma_arr_和dict_builder->spl_table_
   printLemmaArray(dict_builder->lemma_arr_, dict_builder->lemma_num_);
   printSpellingTable(dict_builder->spl_table_);
+  printSpellingBuff(spl_buf, spl_item_size, spl_num);
 }
 
 }

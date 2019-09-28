@@ -525,6 +525,7 @@ bool DictBuilder::build_dict(const char *fn_raw,
   // The size of an spelling. '\0' is included. If the spelling table is
   // initialized to calculate the spelling scores, the last char in the
   // spelling string will be score, and it is also included in spl_item_size.
+  // 对每个音节的词频做归一化处理，统一到[0, 255]区间，并按照音节排序
   size_t spl_item_size;
   size_t spl_num;
   const char* spl_buf;

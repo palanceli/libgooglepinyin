@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 void printLemmaArray(LemmaEntry* lemma_arr, size_t num, int limit){
+  LOG(INFO)<<"lemma_num_="<<num;
   char szTitle[] ="idx_by_py idx_by_hz hz_str_len      freq hanzi_str  \
               pinyin_str                   hanzi_scis_ids      spl_idx_arr";
   printf("%s\n", szTitle);
@@ -76,12 +77,12 @@ void printLemmaArray(LemmaEntry* lemma_arr, size_t num, int limit){
     if(limit>0 && i >= limit)
       break;
   }
-  printf("total num=%zu\n", num);
+  printf("\n");
 }
 
-
 void printSpellingTable(SpellingTable* spellingTable, int limit){
-  printf("idx    str    freq    total num:%zu\n", spellingTable->spelling_num_);
+  LOG(INFO)<<"raw spelling num="<<spellingTable->spelling_num_;
+  printf("idx    str    freq\n");
   int cPrint = 0;
   for(size_t i=0; i<spellingTable->spelling_max_num_; i++){
     RawSpelling *rawspelling =spellingTable->raw_spellings_ + i;
@@ -91,7 +92,28 @@ void printSpellingTable(SpellingTable* spellingTable, int limit){
     printf("%3lu, %7s, %.2f\n", i, rawspelling->str, rawspelling->freq);
     
     if(limit>0 && ++cPrint>limit){
-      return;
+      break;
     }
   }
+  printf("\n");
 }
+
+void printSpellingBuff(const char *spellingBuf, size_t splItemSize, size_t num, int limit){
+  LOG(INFO)<<"spelling buff num="<<num;
+  printf("idx    str    freq\n");
+  for(size_t i=0; i<num; i++){
+    char szLine[1024] = {0};
+    int iPos = 0;
+    int cMsg = 0;
+    
+    const char* pSpl = spellingBuf + i * splItemSize;
+    cMsg = sprintf(szLine + iPos, "%3lu, %7s, %u", i, pSpl, (unsigned char)pSpl[7]);
+    iPos += cMsg;
+    printf("%s\n", szLine);
+    if(limit>0 && i>limit){
+      break;
+    }
+  }
+  printf("\n");
+}
+
