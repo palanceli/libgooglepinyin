@@ -134,6 +134,8 @@ bool SpellingTable::init_table(size_t pure_spl_size, size_t spl_max_num,
   return true;
 }
 
+// raw_spellings_是一个哈希数组：
+// RawSpelling::str记录音节，RawSpelling::freq记录该音节的总词频
 bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
   if (frozen_ || NULL == spelling_str)
     return false;
@@ -158,7 +160,7 @@ bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
 
   size_t hash_pos_ori = hash_pos;
 
-  while (true) {
+  while (true) { // 如果找到则累加产品，否则往后找
     if (strncmp(raw_spellings_[hash_pos].str,
                 spelling_str, spelling_size_ - 1) == 0) {
       raw_spellings_[hash_pos].freq += freq;

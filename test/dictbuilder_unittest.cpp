@@ -38,12 +38,14 @@
 #include "../include/dicttrie.h"
 #include "../include/matrixsearch.h"
 #include "../include/dictbuilder.h"
+#include "../include/loghelper.h"
 #include <unistd.h>
 
 // cd libgooglepinyin/build/test/Debug
 // ./pinyin_test --gtest_filter=DictBuilderTest.TC01BuildDict
 
 using namespace ime_pinyin;
+
 
 namespace googlepinyin_test{
 class DictBuilderTest : public testing::Test{
@@ -76,57 +78,6 @@ TEST_F(DictBuilderTest, TC02BuildDict){
   dict_builder->build_dict(mSzRawDictPath, mSzValidUtfPath, dict_trie);
 }
 
-void printLemmaArray(LemmaEntry* lemma_arr, size_t num, int limit=10){
-  char szTitle[] ="idx_by_py idx_by_hz hz_str_len      freq hanzi_str  \
-              pinyin_str                   hanzi_scis_ids      spl_idx_arr";
-  printf("%s\n", szTitle);
-  
-  for(size_t i=0; i<num; i++){
-    if(i >= limit)
-      break;
-    
-    ime_pinyin::LemmaEntry *pLemma = lemma_arr + i;
-    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
-    std::string strHanzi =  convert.to_bytes((char16_t*)pLemma->hanzi_str);
-    
-    std::string strPy = "";
-    for(size_t j=0; j<ime_pinyin::kMaxLemmaSize; j++){
-      if(strlen(pLemma->pinyin_str[j]) == 0)
-        break;
-      strPy += " ";
-      strPy += pLemma->pinyin_str[j];
-    }
-    
-    std::string strScis = "";
-    for(size_t j=0; j<ime_pinyin::kMaxLemmaSize; j++){
-      if(pLemma->hanzi_scis_ids[j] == 0){
-        strScis += "0 ";
-      }else{
-        char sz[8] = {0};
-        sprintf(sz, "%5u ", pLemma->hanzi_scis_ids[j]);
-        strScis += sz;
-      }
-    }
-    
-    std::string strSpl = "";
-    for(size_t j=0; j<ime_pinyin::kMaxLemmaSize + 1; j++){
-      if(pLemma->spl_idx_arr[j] == 0){
-        strSpl += "0 ";
-      }else{
-        char sz[8] = {0};
-        sprintf(sz, "%4u ", pLemma->spl_idx_arr[j]);
-        strSpl += sz;
-      }
-    }
-    
-    printf("%8zu, %8zu, %9u, %8.0f, %9s, %24s, %32s, %24s\n",
-           pLemma->idx_by_py, pLemma->idx_by_hz,
-           pLemma->hz_str_len, pLemma->freq,
-           strHanzi.c_str(), strPy.c_str(),
-           strScis.c_str(), strSpl.c_str());
-  }
-}
-
 TEST_F(DictBuilderTest, TC03BuildDict){
   DictTrie* dict_trie = new DictTrie();
   DictBuilder* dict_builder = new DictBuilder();
@@ -137,6 +88,7 @@ TEST_F(DictBuilderTest, TC03BuildDict){
   
   // 查看dict_builder->lemma_arr_和dict_builder->spl_table_
   printLemmaArray(dict_builder->lemma_arr_, dict_builder->lemma_num_);
+  printSpellingTable(dict_builder->spl_table_);
 }
 
 }

@@ -1,6 +1,8 @@
 set(PINYIN_TEST_SRCS
 	pinyinime_unittest.cpp
 	dictbuilder_unittest.cpp
+	loghelper.cpp
+	../include/loghelper.h
 )
 
 add_executable(pinyin_test ${PINYIN_TEST_SRCS})
