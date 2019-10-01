@@ -1,5 +1,7 @@
 project(googlepinyin)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1.3)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)  # not necessary, but encouraged
 
 option(ENABLE_STATIC "Build static library" True)
 
@@ -42,7 +44,7 @@ set(CMAKE_C_FLAGS "-Wall ${CMAKE_C_FLAGS}")
 
 #set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAG}")  # 在mac OS下会报错，用下面这行替换
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-undefined,error ${CMAKE_SHARED_LINKER_FLAG}")
-
+set (CMAKE_CXX_STANDARD 11)
 
 add_subdirectory(src)
 add_subdirectory(tools)

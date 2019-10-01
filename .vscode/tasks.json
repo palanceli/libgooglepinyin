@@ -5,16 +5,11 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "clang++ build active file",
-            "command": "/usr/bin/clang++",
-            "args": [
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
+            "label": "pinyin_test",
+            "command": "${workspaceFolder}/build/test/pinyin_test",
+            "args": ["--gtest_filter=DictBuilderTest.TC03BuildDict"],
             "options": {
-                "cwd": "/usr/bin"
+                "cwd": "${workspaceFolder}"
             }
         },
     ]

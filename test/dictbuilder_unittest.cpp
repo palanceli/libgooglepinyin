@@ -87,7 +87,6 @@ TEST_F(DictBuilderTest, TC02BuildDict)
 
 TEST_F(DictBuilderTest, TC03BuildDict)
 {
-
   DictTrie *dict_trie = new DictTrie();
   DictBuilder *dict_builder = new DictBuilder();
   dict_trie->free_resource(true);
