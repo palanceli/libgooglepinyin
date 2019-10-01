@@ -100,7 +100,7 @@ void printSpellingTable(SpellingTable* spellingTable, int limit){
 
 void printSpellingBuff(const char *spellingBuf, size_t splItemSize, size_t num, int limit){
   LOG(INFO)<<"spelling buff num="<<num;
-  printf("idx    str    freq\n");
+  printf("idx       str freq\n");
   for(size_t i=0; i<num; i++){
     char szLine[1024] = {0};
     int iPos = 0;
@@ -117,3 +117,40 @@ void printSpellingBuff(const char *spellingBuf, size_t splItemSize, size_t num, 
   printf("\n");
 }
 
+void printSpellingNodes(SpellingNode** spellingNodes, size_t num, int limit){
+  LOG(INFO)<<"spelling nodes num="<<num;
+  printf("idx spelling_idx this_char num_of_son score\n");
+  for(size_t i=0; i<num; i++){
+    SpellingNode* node = spellingNodes[i];
+    if(node == nullptr)
+      continue;
+    
+    printf("%2lu, %11d, %8c, %9d, %d\n", i, node->spelling_idx,
+           node->char_this_node, node->num_of_son, node->score);
+    if(limit>0 && i>limit){
+      break;
+    }
+  }
+  printf("\n");
+}
+
+void printSpellingTrieNodes(SpellingNode* spellingNodes, const char* pre){
+  for(int i=0; i<spellingNodes->num_of_son; i++){
+    SpellingNode* node = spellingNodes->first_son + i;
+    char szPinyin[8] = {0};
+    sprintf(szPinyin, "%s%c", pre, node->char_this_node);
+    printf("%11d, %8s, %9d, %d\n", node->spelling_idx,
+           szPinyin, node->num_of_son, node->score);
+  }
+  for(int i=0; i<spellingNodes->num_of_son; i++){
+    SpellingNode* node = spellingNodes->first_son + i;
+    char szPinyin[8] = {0};
+    sprintf(szPinyin, "%s%c", pre, node->char_this_node);
+    printSpellingTrieNodes(node, szPinyin);
+  }
+}
+
+void printSpellingTrie(SpellingTrie& spellingTrie){
+  printf("spelling_idx this_char num_of_son score\n");
+  printSpellingTrieNodes(spellingTrie.root_, "");
+}

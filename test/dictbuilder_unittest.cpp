@@ -94,6 +94,16 @@ TEST_F(DictBuilderTest, TC03BuildDict){
   printLemmaArray(dict_builder->lemma_arr_, dict_builder->lemma_num_);
   printSpellingTable(dict_builder->spl_table_);
   printSpellingBuff(spl_buf, spl_item_size, spl_num);
+  
+  SpellingTrie &spl_trie = SpellingTrie::get_instance();
+
+  spl_trie.construct(spl_buf, spl_item_size, spl_num,
+                     dict_builder->spl_table_->get_score_amplifier(),
+                     dict_builder->spl_table_->get_average_score());
+  
+  printSpellingNodes(spl_trie.level1_sons_, spl_trie.kValidSplCharNum, 0);
+  
+  printSpellingTrie(spl_trie);
 }
 
 }
