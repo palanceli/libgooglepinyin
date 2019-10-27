@@ -34,3 +34,6 @@ void printSpellingBuff(const char *spellingBuf, size_t splItemSize, size_t num, 
 void printSpellingNodes(SpellingNode** spellingNodes, size_t num, int limit=10);
 void printSpellingTrie(SpellingTrie& spellingTrie);
 void printSpellingTrieNodes(SpellingNode* spellingNodes, const char* pre);
+
+// 打印spellingTrie被保存到磁盘的数据
+void printSpellingTrieSavedData(SpellingTrie& spellingTrie);

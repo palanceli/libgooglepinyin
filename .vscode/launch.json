@@ -11,7 +11,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
-            "args": ["--gtest_filter=DictBuilderTest.TC03BuildDict"],
+            "args": ["--gtest_filter=DictBuilderTest.TC01BuildDict"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

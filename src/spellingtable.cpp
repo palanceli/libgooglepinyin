@@ -161,7 +161,7 @@ bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
 
   size_t hash_pos_ori = hash_pos;
 
-  while (true) { // 如果找到则累加产品，否则往后找
+  while (true) { // 如果找到则累加词频，否则往后找
     if (strncmp(raw_spellings_[hash_pos].str,
                 spelling_str, spelling_size_ - 1) == 0) {
       raw_spellings_[hash_pos].freq += freq;
@@ -226,7 +226,8 @@ const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
         compare_raw_spl_eb);
 
   // After sorting, only the first spelling_num_ items are valid.
-  // Copy them to the destination buffer.
+  // Copy them to the destination buffer. 
+  // spelling_size_被初始化为`kMaxPinyinSize+1`
   for (size_t pos = 0; pos < spelling_num_; pos++) {
     strncpy(spelling_buf_ + pos * spelling_size_, raw_spellings_[pos].str,
             spelling_size_);
