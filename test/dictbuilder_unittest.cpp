@@ -133,7 +133,7 @@ TEST_F(DictBuilderTest, TC03BuildDictList){
   DictBuilder *dict_builder = new DictBuilder();
   dict_trie->free_resource(true);
 
-  size_t lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
+  dict_builder->lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
 
   size_t spl_item_size;
   size_t spl_num;
@@ -175,10 +175,12 @@ TEST_F(DictBuilderTest, TC03BuildDictList){
 
   // Construct the dict list
   dict_trie->dict_list_ = new DictList();
-  bool dl_success = dict_trie->dict_list_->init_list(dict_builder->scis_,
-                                                     dict_builder->scis_num_,
-                                                     dict_builder->lemma_arr_, 
-                                                     dict_builder->lemma_num_);
+  DictList* dict_list = dict_trie->dict_list_;
+  bool dl_success = dict_list->init_list(dict_builder->scis_,
+                                         dict_builder->scis_num_,
+                                         dict_builder->lemma_arr_,
+                                         dict_builder->lemma_num_);
+  printDictListSavedData(dict_trie->dict_list_);
 }
 
 TEST_F(DictBuilderTest, TC02SaveDict)
@@ -203,7 +205,7 @@ TEST_F(DictBuilderTest, TC03BuildDict)
 
   // 将文件中的词条加载到lemma_num_，并将(拼音, 词频)加入到spl_table_，
   // 后者是一个 `hash[拼音]词频` 的数据结构，同样的拼音重复加入时，将词频累加
-  size_t lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
+  dict_builder->lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
 
   size_t spl_item_size;
   size_t spl_num;
@@ -240,7 +242,7 @@ TEST_F(DictBuilderTest, TC04BuildDict)
   DictBuilder *dict_builder = new DictBuilder();
   dict_trie->free_resource(true);
 
-  size_t lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
+  dict_builder->lemma_num_ = dict_builder->read_raw_dict(mSzRawDictPath, mSzValidUtfPath, 240000);
 
   size_t spl_item_size;
   size_t spl_num;

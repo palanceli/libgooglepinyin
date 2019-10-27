@@ -191,3 +191,11 @@ void printSpellingTrieSavedData(SpellingTrie &spellingTrie)
                     spellingTrie.spelling_num_);
   printf("======== ======== ======== ======== ========\n");
 }
+
+void printDictListSavedData(DictList* dictList)
+{
+  printf("======== DictList saved data ========\n");
+  printf("scis_num \n");
+  printf("%8lu \n", dictList->scis_num_);
+  printf("======== ======== ======== ======== ========\n");
+}
