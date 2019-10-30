@@ -27,26 +27,25 @@
 #include "../include/loghelper.h"
 #include <unistd.h>
 
-void printLemmaArray(LemmaEntry *lemma_arr, size_t num, int limit)
+void printLemmaTitle()
 {
-  LOG(INFO) << "lemma_num_=" << num;
-  char szTitle[] = "idx_by_py idx_by_hz hz_str_len      freq hanzi_str  \
-              pinyin_str                   hanzi_scis_ids      spl_idx_arr";
-  printf("%s\n", szTitle);
+  printf( "idx_by_py idx_by_hz hz_str_len    freq hanzi_str  \
+              pinyin_str                   hanzi_scis_ids      spl_idx_arr\n");
+}
 
-  for (size_t i = 0; i < num; i++)
+void printLemmaItem(LemmaEntry *pLemma){
+  if (pLemma == nullptr)
+    return;
+  std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+  std::string strHanzi = convert.to_bytes((char16_t *)pLemma->hanzi_str);
+
+  std::string strPy = "";
+  for (size_t j = 0; j < ime_pinyin::kMaxLemmaSize; j++)
   {
-    ime_pinyin::LemmaEntry *pLemma = lemma_arr + i;
-    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
-    std::string strHanzi = convert.to_bytes((char16_t *)pLemma->hanzi_str);
-
-    std::string strPy = "";
-    for (size_t j = 0; j < ime_pinyin::kMaxLemmaSize; j++)
-    {
-      if (strlen(pLemma->pinyin_str[j]) == 0)
-        break;
-      strPy += " ";
-      strPy += pLemma->pinyin_str[j];
+    if (strlen(pLemma->pinyin_str[j]) == 0)
+      break;
+    strPy += " ";
+    strPy += pLemma->pinyin_str[j];
     }
 
     std::string strScis = "";
@@ -79,12 +78,22 @@ void printLemmaArray(LemmaEntry *lemma_arr, size_t num, int limit)
       }
     }
 
-    printf("%8zu, %8zu, %9u, %8.0f, %9s, %24s, %32s, %24s\n",
+    printf("%8zu, %8zu, %9u, %6.0f, %9s, %24s, %32s, %24s\n",
            pLemma->idx_by_py, pLemma->idx_by_hz,
            pLemma->hz_str_len, pLemma->freq,
            strHanzi.c_str(), strPy.c_str(),
            strScis.c_str(), strSpl.c_str());
+}
 
+void printLemmaArray(LemmaEntry *lemma_arr, size_t num, int limit)
+{
+  LOG(INFO) << "lemma_num_=" << num;
+  printLemmaTitle();
+
+  for (size_t i = 0; i < num; i++)
+  {
+    ime_pinyin::LemmaEntry *pLemma = lemma_arr + i;
+    printLemmaItem(pLemma);
     if (limit > 0 && i >= limit)
       break;
   }
@@ -197,5 +206,62 @@ void printDictListSavedData(DictList* dictList)
   printf("======== DictList saved data ========\n");
   printf("scis_num \n");
   printf("%8lu \n", dictList->scis_num_);
+  printf("start_pos start_id\n");
+  std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+
+  for(int i=0; i<kMaxLemmaSize; i++)
+  {
+    printf("%9lu %8lu\n", dictList->start_pos_[i], dictList->start_id_[i]);
+  }
+  printf("scis_hz scis_splid\n");
+  for(int i=0; i<dictList->scis_num_; i++)
+  {
+    char16 sz[2] = {dictList->scis_hz_[i], 0};
+    std::string strHanzi = convert.to_bytes((char16_t *)sz);
+    printf("%7s %10d\n", strHanzi.c_str(), dictList->scis_splid_[i]);
+    if(i > 6)
+    {
+      printf("%7s %10s\n", "...", "...");
+      break;
+    }
+  }
+  printf("buf：");
+  for(int wordlen=1; wordlen<=4; wordlen++)
+  {
+    size_t start_pos = dictList->start_pos_[wordlen-1];
+    for(int i=0; i<3; i++)
+    {
+      char16 sz[8] = {0};
+      int cbWords = wordlen * sizeof(char16);
+      memcpy(sz, dictList->buf_ + start_pos + i * cbWords, cbWords);
+      std::string strHanzi = convert.to_bytes((char16_t *)sz);
+      printf("%s", strHanzi.c_str());
+    }
+    printf("...");
+  }
+  printf("\n");
+  printf("======== ======== ======== ======== ========\n");
+}
+
+void printLemmaArrayByHzIdx(LemmaEntry* lemma, size_t num, int idx)
+{
+  for(int i=0; i<num; i++){
+    if (lemma[i].idx_by_hz == idx)
+    {
+      printLemmaTitle();
+      printLemmaItem(lemma + i);
+      return;
+    }
+  }
+  printf("lemma NOT exits! idx_by_hz=%d\n", idx);
+}
+
+void printDictTrieSavedData(DictTrie* dictTrie)
+{
+  printf("========    DictTrie saved data    ========\n");
+  printf("lma_node_num_le0 lma_node_num_ge1 lma_idx_buf_len top_lmas_num\n");
+  printf("%16lu %16lu %15lu %12lu\n", dictTrie->lma_node_num_le0_,
+         dictTrie->lma_node_num_ge1_, dictTrie->lma_idx_buf_len_,
+         dictTrie->top_lmas_num_);
   printf("======== ======== ======== ======== ========\n");
 }

@@ -37,6 +37,9 @@ void printSpellingTrieNodes(SpellingNode* spellingNodes, const char* pre);
 
 // 打印spellingTrie被保存到磁盘的数据
 void printSpellingTrieSavedData(SpellingTrie& spellingTrie);
-
 // 打印dictList被保存到磁盘的数据
 void printDictListSavedData(DictList* dictList);
+// 打印dictTrie被保存到磁盘的数据
+void printDictTrieSavedData(DictTrie* dictTrie);
+
+void printLemmaArrayByHzIdx(LemmaEntry* lemma, size_t num, int idx);

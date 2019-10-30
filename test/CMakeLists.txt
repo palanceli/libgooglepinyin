@@ -1,6 +1,8 @@
 set(PINYIN_TEST_SRCS
 	pinyinime_unittest.cpp
 	dictbuilder_unittest.cpp
+	loaddict_unittest.cpp
+	convertor_unittest.cpp
 	loghelper.cpp
 	../include/loghelper.h
 )

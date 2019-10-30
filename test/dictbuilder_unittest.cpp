@@ -83,18 +83,19 @@ TEST_F(DictBuilderTest, TC01BuildDict)
 
   // 以下是save_dict的核心内容
   // if (!spl_trie.save_spl_trie(fp) || !dict_list_->save_list(fp) ||
-  //     !save_dict(fp) || !ngram.save_ngram(fp)) {
+  //     !save_dict(fp) || !ngram.save_ngram(fp)) 
+}
 
+// 查看spl_trie的内容
+TEST_F(DictBuilderTest, TC02BuildTrie)
+{
   // 以下是save_spl_trie展开的内容
   // fwrite(&spelling_size_, sizeof(size_t), 1, fp)
   // fwrite(&spelling_num_, sizeof(size_t), 1, fp)
   // fwrite(&score_amplifier_, sizeof(float), 1, fp)
   // fwrite(&average_score_, sizeof(unsigned char), 1, fp)
   // fwrite(spelling_buf_, sizeof(char) * spelling_size_, spelling_num_, fp)
-}
 
-TEST_F(DictBuilderTest, TC02BuildTrie)
-{
   DictTrie *dict_trie = new DictTrie();
   DictBuilder *dict_builder = new DictBuilder();
   dict_trie->free_resource(true);
@@ -120,14 +121,15 @@ TEST_F(DictBuilderTest, TC02BuildTrie)
   printSpellingTrieSavedData(spl_trie);
 }
 
+// 查看dict_list的内容
 TEST_F(DictBuilderTest, TC03BuildDictList){
   // 以下是DictList::save_list的展开内容
-  // fwrite(&scis_num_, sizeof(size_t), 1, fp)
-  // fwrite(start_pos_, sizeof(size_t), kMaxLemmaSize + 1, fp)
-  // fwrite(start_id_, sizeof(size_t), kMaxLemmaSize + 1, fp)
-  // fwrite(scis_hz_, sizeof(char16), scis_num_, fp)
-  // fwrite(scis_splid_, sizeof(SpellingId), scis_num_, fp)
-  // fwrite(buf_, sizeof(char16), start_pos_[kMaxLemmaSize], fp)
+  // fwrite(&scis_num_, sizeof(size_t), 1, fp)                    单字的个数
+  // fwrite(start_pos_, sizeof(size_t), kMaxLemmaSize + 1, fp)    首个N字词在buf_中的偏移
+  // fwrite(start_id_, sizeof(size_t), kMaxLemmaSize + 1, fp)     首个N字词的idx_by_hz
+  // fwrite(scis_hz_, sizeof(char16), scis_num_, fp)              单字汉字
+  // fwrite(scis_splid_, sizeof(SpellingId), scis_num_, fp)       该汉字对应的splid
+  // fwrite(buf_, sizeof(char16), start_pos_[kMaxLemmaSize], fp)  所有词的汉字
 
   DictTrie *dict_trie = new DictTrie();
   DictBuilder *dict_builder = new DictBuilder();
@@ -181,6 +183,23 @@ TEST_F(DictBuilderTest, TC03BuildDictList){
                                          dict_builder->lemma_arr_,
                                          dict_builder->lemma_num_);
   printDictListSavedData(dict_trie->dict_list_);
+}
+
+// 查看dict_trie的内容
+TEST_F(DictBuilderTest, TC04BuildDictTrie){
+  // 以下是DictTrie::save_dict展开的内容：
+  // fwrite(&lma_node_num_le0_, sizeof(size_t), 1, fp)
+  // fwrite(&lma_node_num_ge1_, sizeof(size_t), 1, fp)
+  // fwrite(&lma_idx_buf_len_, sizeof(size_t), 1, fp)
+  // fwrite(&top_lmas_num_, sizeof(size_t), 1, fp)
+  // fwrite(root_, sizeof(LmaNodeLE0), lma_node_num_le0_, fp) 这是一个数组：LmaNodeLE0[lma_nds_used_num_le0_]
+  // fwrite(nodes_ge1_, sizeof(LmaNodeGE1), lma_node_num_ge1_, fp) 这是数组：LmaNodeGE1[lma_nds_used_num_ge1_]
+  // fwrite(lma_idx_buf_, sizeof(unsigned char), lma_idx_buf_len_, fp)
+
+  // DictTrie构建完成基本上就需要build_dict全部执行完了：
+  DictTrie *dict_trie = new DictTrie();
+  dict_trie->build_dict(mSzRawDictPath, mSzValidUtfPath);
+  printDictTrieSavedData(dict_trie);
 }
 
 TEST_F(DictBuilderTest, TC02SaveDict)
@@ -283,6 +302,10 @@ TEST_F(DictBuilderTest, TC04BuildDict)
   size_t scis_num_ = dict_builder->build_scis();
 
   printLemmaArray(dict_builder->lemma_arr_, dict_builder->lemma_num_);
+  printLemmaArrayByHzIdx(dict_builder->lemma_arr_, dict_builder->lemma_num_, 1);
+  printLemmaArrayByHzIdx(dict_builder->lemma_arr_, dict_builder->lemma_num_, 17034);
+  printLemmaArrayByHzIdx(dict_builder->lemma_arr_, dict_builder->lemma_num_, 51104);
+  printLemmaArrayByHzIdx(dict_builder->lemma_arr_, dict_builder->lemma_num_, 58476);
 }
 
 } // namespace googlepinyin_test

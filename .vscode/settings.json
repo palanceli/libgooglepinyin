@@ -2,6 +2,7 @@
     "files.associations": {
         "__locale": "cpp",
         "locale": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "random": "cpp"
     }
 }
