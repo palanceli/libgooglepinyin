@@ -4,10 +4,16 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    
-        
         {
-            "name": "(lldb) Launch",
+            "name": "(lldb) 启动",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/pinyin_test",
+            "args": ["--gtest_filter=ConvertorTest.TC03Convert"],
+            "cwd": "${workspaceFolder}",
+        },        
+        {
+            "name": "(lldb) Launch pinyin_test",
             "type": "cppdbg",
             "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
@@ -16,7 +22,15 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "MIMode": "lldb"
+            "MIMode": "lldb",
+            "setupCommands": [
+                {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true,
+                "preLaunchTask": "test"
+                }
+                ]
         },
 
         // {

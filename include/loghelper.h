@@ -43,3 +43,9 @@ void printDictListSavedData(DictList* dictList);
 void printDictTrieSavedData(DictTrie* dictTrie);
 
 void printLemmaArrayByHzIdx(LemmaEntry* lemma, size_t num, int idx);
+
+void printMatrixRows(MatrixRow* row, size_t num, MatrixNode* head);
+void printDictExtPara(DictExtPara* dep);
+void printDictMatchInfo(DictMatchInfo* dmi, size_t num);
+void printMatrixNode(MatrixNode* nd, size_t num, MatrixSearch *matrix_search);
+void printLmaPsbItem(LmaPsbItem* lpi, size_t num);

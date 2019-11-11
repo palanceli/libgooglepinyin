@@ -218,7 +218,8 @@ void printDictListSavedData(DictList* dictList)
   {
     char16 sz[2] = {dictList->scis_hz_[i], 0};
     std::string strHanzi = convert.to_bytes((char16_t *)sz);
-    printf("%7s %10d\n", strHanzi.c_str(), dictList->scis_splid_[i]);
+    printf("%7s %4u %4u\n", strHanzi.c_str(), 
+    dictList->scis_splid_[i].full_splid, dictList->scis_splid_[i].half_splid);
     if(i > 6)
     {
       printf("%7s %10s\n", "...", "...");
@@ -264,4 +265,98 @@ void printDictTrieSavedData(DictTrie* dictTrie)
          dictTrie->lma_node_num_ge1_, dictTrie->lma_idx_buf_len_,
          dictTrie->top_lmas_num_);
   printf("======== ======== ======== ======== ========\n");
+}
+
+
+void printMartixRowTitle()
+{
+  printf("========    matrix row    ========\n");
+  printf("[ ] mtrx_nd_pos dmi_pos mtrx_nd_num dmi_num dmi_has_full_id mtrx_nd_fixed\n");
+}
+
+void printMatrixRows(MatrixRow *rows, size_t num, MatrixNode* head)
+{
+  if (rows == nullptr)
+    return;
+  printMartixRowTitle();
+  for (int i = 0; i < num; i++)
+  {
+    MatrixRow *row = rows + i;
+    int offset = row->mtrx_nd_fixed == nullptr ? -1 : row->mtrx_nd_fixed - head;
+    printf("%-3d %11u %7u %11u %7u %15u %13d\n", i, row->mtrx_nd_pos, row->dmi_pos,
+           row->mtrx_nd_num, row->dmi_num, row->dmi_has_full_id, offset);
+  }
+  printf("\n");
+}
+
+void printDictExtPara(DictExtPara* dep)
+{
+  if(dep == nullptr)
+    return;
+  printf("========    DictExtPara    ========\n");
+  printf("splids_extended ext_len step_no splid_end_split id_start id_num splids\n");
+  printf("%15u %7u %7u %15d %8u %6u [", dep->splids_extended, dep->ext_len,
+         dep->step_no, dep->splid_end_split, dep->id_start, dep->id_num);
+        
+  for(int i=0; i<kMaxSearchSteps; i++){
+    if(dep->splids[i] == 0)
+      break;
+    if(i>0)
+      printf(", ");
+    printf("%u", dep->splids[i]);
+  }
+  printf("]\n\n");
+}
+
+void printDictMatchInfo(DictMatchInfo* dmi, size_t num)
+{
+  if(dmi == nullptr)
+    return;
+  printf("========    DictMatchInfo    ========\n");
+  printf("[ ] dict_handles dmi_fr spl_id dict_level c_phrase splid_end_split splstr_len all_full_id\n");
+  for(int i=0; i<num; i++){
+    printf("%-3d       [%1d, %1d] %6u %6u %10u %8u %15u %10u %11u\n",
+           i, dmi[i].dict_handles[0], dmi[i].dict_handles[1], dmi[i].dmi_fr,
+           dmi[i].spl_id, dmi[i].dict_level, dmi[i].c_phrase,
+           dmi[i].splid_end_split, dmi[i].splstr_len, dmi[i].all_full_id);
+  }
+  printf("\n");
+}
+
+void printMatrixNode(MatrixNode* nd, size_t num, MatrixSearch *matrix_search)
+{
+  if(nd == nullptr)
+    return;
+  std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+  printf("========    MatrixNode    ========\n");
+  printf("[ ]    id score from dmi_fr step\n");
+  for(int i=0; i<num; i++){
+    int offset = nd[i].from == nullptr? -1 : nd[i].from - nd;
+    char16 str[kMaxLemmaSize + 1];
+    size_t str_len = matrix_search->get_lemma_str(nd[i].id, str, kMaxLemmaSize);
+    std::string strHanzi = convert.to_bytes((char16_t*)str);
+    printf("%-3d %5lu %5.0f %4d %6u %4u %s\n",
+           i, nd[i].id, nd[i].score, offset, nd[i].dmi_fr, nd[i].step,
+           nd[i].id > 0 ? strHanzi.c_str() : "");
+  }
+  printf("\n");
+}
+
+void printLmaPsbItem(LmaPsbItem* lpi, size_t num)
+{
+  if(lpi == nullptr)
+    return;
+
+  std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+  printf("========    LmaPsbItem    ========\n");
+  printf("[ ]    id lma_len   psb hanzi\n");
+  for(int i=0; i<num; i++){
+    std::string strHanzi = convert.to_bytes((char16_t)lpi[i].hanzi);
+    printf("%-3d %5u %7u %5u %s\n", i, lpi[i].id, lpi[i].lma_len, lpi[i].psb, strHanzi.c_str());
+    if(i>5){
+      printf("...\n");
+      break;
+    }
+  }
+  printf("\n");
 }
