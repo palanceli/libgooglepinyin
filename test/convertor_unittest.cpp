@@ -164,7 +164,7 @@ TEST_F(ConvertorTest, TC03Convert)
   // im_reset_search(...)
   matrix_search->reset_search();
 
-  char szInput[256] = "ba";
+  char szInput[256] = "ea";
   // im_search(...)
   matrix_search->search(szInput, strlen(szInput));
   size_t candidate_num = matrix_search->get_candidate_num();

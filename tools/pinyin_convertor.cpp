@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     size_t size = 0;
     printf("输入串：%s\n候选串：", im_get_sps_str(&size));  // 返回拼音串
     char16 str[64] = { 0 };
-    for (auto i = 1; i < nr; i++)
+    for (auto i = 0; i < nr; i++)
     {
       im_get_candidate(i, str, 32);         // 获取查询候选
 #ifdef WIN32
@@ -81,8 +81,9 @@ int main(int argc, char* argv[])
 #else
       std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
       std::string strCand = convert.to_bytes((char16_t*)str);
-      std::cout << i << "." << strCand << " ";
-      if (i % 8 == 0)
+      int idx = i + 1;
+      std::cout << idx << "." << strCand << " ";
+      if (idx % 8 == 0)
       {
         std::cout << std::endl;
       }
