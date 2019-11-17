@@ -312,13 +312,15 @@ void printDictMatchInfo(DictMatchInfo* dmi, size_t num)
 {
   if(dmi == nullptr)
     return;
+  SpellingTrie &spl_trie = SpellingTrie::get_instance();
   printf("========    DictMatchInfo    ========\n");
   printf("[ ] dict_handles dmi_fr spl_id dict_level c_phrase splid_end_split splstr_len all_full_id\n");
   for(int i=0; i<num; i++){
-    printf("%-3d       [%1d, %1d] %6u %6u %10u %8u %15u %10u %11u\n",
+    const char* pinyin = spl_trie.get_spelling_str(dmi[i].spl_id);
+    printf("%-3d       [%1d, %1d] %6u %6u %10u %8u %15u %10u %11u %s\n",
            i, dmi[i].dict_handles[0], dmi[i].dict_handles[1], dmi[i].dmi_fr,
            dmi[i].spl_id, dmi[i].dict_level, dmi[i].c_phrase,
-           dmi[i].splid_end_split, dmi[i].splstr_len, dmi[i].all_full_id);
+           dmi[i].splid_end_split, dmi[i].splstr_len, dmi[i].all_full_id, pinyin);
   }
   printf("\n");
 }
@@ -354,7 +356,7 @@ void printLmaPsbItem(LmaPsbItem* lpi, size_t num)
     std::string strHanzi = convert.to_bytes((char16_t)lpi[i].hanzi);
     printf("%-3d %5u %7u %5u %s\n", i, lpi[i].id, lpi[i].lma_len, lpi[i].psb, strHanzi.c_str());
     if(i>5){
-      printf("...\n");
+      printf("...共%lu个\n", num);
       break;
     }
   }
