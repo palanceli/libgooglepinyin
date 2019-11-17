@@ -5,11 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(lldb) 启动",
+            "name": "(lldb) 启动UT",
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/build/test/pinyin_test",
             "args": ["--gtest_filter=ConvertorTest.TC03Convert"],
+            "cwd": "${workspaceFolder}",
+        },   
+        {
+            "name": "(lldb) 启动pinyin_man",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/tools/pinyin_man",
+            "args": ["--spl_id=13"],
             "cwd": "${workspaceFolder}",
         },        
         {

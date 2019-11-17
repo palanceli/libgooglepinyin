@@ -15,3 +15,8 @@ target_link_libraries(dictbuilder ${LINKER_LIBS})
 # 添加拼音转换工具
 add_executable(pinyin_conv pinyin_convertor.cpp)
 target_link_libraries(pinyin_conv ${LINKER_LIBS})
+
+
+# 添加基础数据查询工具
+add_executable(pinyin_man pinyin_man.cpp)
+target_link_libraries(pinyin_man ${LINKER_LIBS})
