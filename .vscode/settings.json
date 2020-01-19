@@ -5,5 +5,6 @@
         "thread": "cpp",
         "random": "cpp",
         "iosfwd": "cpp"
-    }
+    },
+    "cmake.cmakePath": "/Applications/CMake.app/Contents/bin/cmake"
 }
